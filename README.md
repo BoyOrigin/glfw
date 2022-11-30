@@ -4,6 +4,19 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/0kf0ct9831i5l6sp/branch/master?svg=true)](https://ci.appveyor.com/project/elmindreda/glfw)
 [![Coverity Scan](https://scan.coverity.com/projects/4884/badge.svg)](https://scan.coverity.com/projects/glfw-glfw)
 
+# Wayland for Minecraft
+Features:
+- Proper decorations with title and window buttons #[1693](https://github.com/glfw/glfw/pull/1693)
+- Prefer Wayland over X11
+- Avoid crashes possible that caused from Wayland
+- Accurate mouse scroll axis
+Impossible to fix knowing Wayland doesn't have support about it for security purpose:
+- Can't set pointer position at the middle
+- Can't set window icon (You have to set the application's icon in order to get custom icon)
+Known Issues:
+- Proper typing shortcuts (Ctrl+A, Ctrl+C, etc)
+- Proper window size after doing Fullscreen/un-Fullscreen multiple times
+
 ## Introduction
 
 GLFW is an Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan
