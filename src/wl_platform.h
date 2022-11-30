@@ -28,6 +28,10 @@
 #include <xkbcommon/xkbcommon.h>
 #include <xkbcommon/xkbcommon-compose.h>
 
+#ifdef WITH_DECORATION
+#include <libdecor.h>
+#endif
+
 typedef VkFlags VkWaylandSurfaceCreateFlagsKHR;
 
 typedef struct VkWaylandSurfaceCreateInfoKHR
@@ -95,7 +99,9 @@ struct wl_shm;
 #define wl_data_offer_interface _glfw_wl_data_offer_interface
 #define wl_data_source_interface _glfw_wl_data_source_interface
 #define wl_keyboard_interface _glfw_wl_keyboard_interface
+#ifndef WITH_DECORATION
 #define wl_output_interface _glfw_wl_output_interface
+#endif
 #define wl_pointer_interface _glfw_wl_pointer_interface
 #define wl_region_interface _glfw_wl_region_interface
 #define wl_registry_interface _glfw_wl_registry_interface
@@ -198,6 +204,7 @@ typedef xkb_keysym_t (* PFN_xkb_compose_state_get_one_sym)(struct xkb_compose_st
 #define xkb_compose_state_get_status _glfw.wl.xkb.compose_state_get_status
 #define xkb_compose_state_get_one_sym _glfw.wl.xkb.compose_state_get_one_sym
 
+#ifndef WITH_DECORATION
 typedef enum _GLFWdecorationSideWayland
 {
     mainWindow,
@@ -213,6 +220,7 @@ typedef struct _GLFWdecorationWayland
     struct wl_subsurface*       subsurface;
     struct wp_viewport*         viewport;
 } _GLFWdecorationWayland;
+#endif
 
 typedef struct _GLFWofferWayland
 {
@@ -247,12 +255,14 @@ typedef struct _GLFWwindowWayland
         GLFWbool                fullscreen;
     } pending;
 
+#ifndef WITH_DECORATION
     struct {
         struct xdg_surface*     surface;
         struct xdg_toplevel*    toplevel;
         struct zxdg_toplevel_decoration_v1* decoration;
         uint32_t                decorationMode;
     } xdg;
+#endif
 
     _GLFWcursor*                currentCursor;
     double                      cursorPosX, cursorPosY;
@@ -273,11 +283,16 @@ typedef struct _GLFWwindowWayland
 
     struct zwp_idle_inhibitor_v1*          idleInhibitor;
 
+#ifndef WITH_DECORATION
     struct {
         struct wl_buffer*                  buffer;
         _GLFWdecorationWayland             top, left, right, bottom;
         _GLFWdecorationSideWayland         focus;
     } decorations;
+#else
+    struct libdecor_frame                   *decoration_frame;
+#endif
+
 } _GLFWwindowWayland;
 
 // Wayland-specific global data
@@ -294,9 +309,13 @@ typedef struct _GLFWlibraryWayland
     struct wl_keyboard*         keyboard;
     struct wl_data_device_manager*          dataDeviceManager;
     struct wl_data_device*      dataDevice;
+#ifdef WITH_DECORATION
+    struct libdecor             *csd_context;
+#else
     struct xdg_wm_base*         wmBase;
     struct zxdg_decoration_manager_v1*      decorationManager;
     struct wp_viewporter*       viewporter;
+#endif
     struct zwp_relative_pointer_manager_v1* relativePointerManager;
     struct zwp_pointer_constraints_v1*      pointerConstraints;
     struct zwp_idle_inhibit_manager_v1*     idleInhibitManager;

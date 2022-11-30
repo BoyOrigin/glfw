@@ -82,6 +82,7 @@
 #include "wayland-idle-inhibit-unstable-v1-client-protocol-code.h"
 #undef types
 
+#ifndef WITH_DECORATION
 static void wmBaseHandlePing(void* userData,
                              struct xdg_wm_base* wmBase,
                              uint32_t serial)
@@ -93,7 +94,18 @@ static const struct xdg_wm_base_listener wmBaseListener =
 {
     wmBaseHandlePing
 };
+#else
+void decoration_error(struct libdecor *context,
+                      enum libdecor_error error,
+                      const char *message)
+{
+    _glfwInputError(GLFW_PLATFORM_ERROR, "Wayland: Caught error (%d): %s\n", error, message);
+}
 
+static struct libdecor_interface decoration_interface = {
+    decoration_error,
+};
+#endif
 static void registryHandleGlobal(void* userData,
                                  struct wl_registry* registry,
                                  uint32_t name,
@@ -141,6 +153,7 @@ static void registryHandleGlobal(void* userData,
                                  &wl_data_device_manager_interface, 1);
         }
     }
+#ifndef WITH_DECORATION
     else if (strcmp(interface, "xdg_wm_base") == 0)
     {
         _glfw.wl.wmBase =
@@ -159,6 +172,7 @@ static void registryHandleGlobal(void* userData,
         _glfw.wl.viewporter =
             wl_registry_bind(registry, name, &wp_viewporter_interface, 1);
     }
+#endif
     else if (strcmp(interface, "zwp_relative_pointer_manager_v1") == 0)
     {
         _glfw.wl.relativePointerManager =
@@ -673,12 +687,14 @@ int _glfwInitWayland(void)
     }
 #endif
 
+#ifndef WITH_DECORATION
     if (!_glfw.wl.wmBase)
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
                         "Wayland: Failed to find xdg-shell in your compositor");
         return GLFW_FALSE;
     }
+#endif
 
     if (!_glfw.wl.shm)
     {
@@ -697,6 +713,10 @@ int _glfwInitWayland(void)
                                                    _glfw.wl.seat);
         _glfwAddDataDeviceListenerWayland(_glfw.wl.dataDevice);
     }
+
+#ifdef WITH_DECORATION
+    _glfw.wl.csd_context = libdecor_new(_glfw.wl.display, &decoration_interface);
+#endif
 
     return GLFW_TRUE;
 }
@@ -749,12 +769,16 @@ void _glfwTerminateWayland(void)
         wl_compositor_destroy(_glfw.wl.compositor);
     if (_glfw.wl.shm)
         wl_shm_destroy(_glfw.wl.shm);
+#ifdef WITH_DECORATION
+    libdecor_unref(_glfw.wl.csd_context);
+#else
     if (_glfw.wl.viewporter)
         wp_viewporter_destroy(_glfw.wl.viewporter);
     if (_glfw.wl.decorationManager)
         zxdg_decoration_manager_v1_destroy(_glfw.wl.decorationManager);
     if (_glfw.wl.wmBase)
         xdg_wm_base_destroy(_glfw.wl.wmBase);
+#endif
     if (_glfw.wl.selectionOffer)
         wl_data_offer_destroy(_glfw.wl.selectionOffer);
     if (_glfw.wl.dragOffer)

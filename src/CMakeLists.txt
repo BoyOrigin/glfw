@@ -172,6 +172,14 @@ if (GLFW_BUILD_WAYLAND)
         wayland-egl>=0.2.7
         xkbcommon>=0.5.0)
 
+    if (GLFW_USE_LIBDECOR)
+        pkg_check_modules(libdecor REQUIRED libdecor-0)
+        list(APPEND glfw_PKG_DEPS "libdecor-0")
+        target_include_directories(glfw PRIVATE "${libdecor_INCLUDE_DIRS}")
+        target_link_libraries(glfw PRIVATE "${libdecor_LINK_LIBRARIES}")
+        add_definitions(-DWITH_DECORATION)
+    endif()
+
     target_include_directories(glfw PRIVATE ${Wayland_INCLUDE_DIRS})
 
     if (NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")

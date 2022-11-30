@@ -283,7 +283,11 @@ void glfwDefaultWindowHints(void)
     _glfw.hints.framebuffer.redBits      = 8;
     _glfw.hints.framebuffer.greenBits    = 8;
     _glfw.hints.framebuffer.blueBits     = 8;
+#ifndef WITH_DECORATION
     _glfw.hints.framebuffer.alphaBits    = 8;
+#else
+    _glfw.hints.framebuffer.alphaBits    = 0;
+#endif
     _glfw.hints.framebuffer.depthBits    = 24;
     _glfw.hints.framebuffer.stencilBits  = 8;
     _glfw.hints.framebuffer.doublebuffer = GLFW_TRUE;
