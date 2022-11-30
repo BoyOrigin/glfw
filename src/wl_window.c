@@ -1297,7 +1297,7 @@ static void pointerHandleAxis(void* userData,
     // Wayland scroll events are in pointer motion coordinate space (think two
     // finger scroll).  The factor 10 is commonly used to convert to "scroll
     // step means 1.0.
-    const double scrollFactor = 1.0 / 10.0;
+    const double scrollFactor = 1.0 / 20.0;
 
     if (!window)
         return;
@@ -1897,8 +1897,7 @@ void _glfwSetWindowTitleWayland(_GLFWwindow* window, const char* title)
 void _glfwSetWindowIconWayland(_GLFWwindow* window,
                                int count, const GLFWimage* images)
 {
-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
-                    "Wayland: The platform does not support setting the window icon");
+    fprintf(stderr, "!!! Ignoring Error: Wayland: The platform does not support setting the window icon\n");
 }
 
 void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
@@ -2093,8 +2092,7 @@ void _glfwRequestWindowAttentionWayland(_GLFWwindow* window)
 
 void _glfwFocusWindowWayland(_GLFWwindow* window)
 {
-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
-                    "Wayland: The platform does not support setting the input focus");
+    fprintf(stderr, "!!! Ignoring Error: Wayland: The platform does not support setting the input focus\n");
 }
 
 void _glfwSetWindowMonitorWayland(_GLFWwindow* window,
