@@ -19,6 +19,8 @@ Known Issues:
 - Proper typing shortcuts (Ctrl+A, Ctrl+C, etc)
 - Proper window size after doing Fullscreen/un-Fullscreen multiple times
 
+For Download and How to use it: [Click Here](https://github.com/BoyOrigin/glfw/releases/tag/3.4.0)
+
 ## Introduction
 
 GLFW is an Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan
