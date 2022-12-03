@@ -10,14 +10,14 @@ Features:
 - Prefer Wayland over X11
 - Avoid crashes possible that caused from Wayland
 - Accurate mouse scroll axis
+- Key Modifiers Fix
 
 Impossible to fix knowing Wayland doesn't have support about it for security purpose:
 - Can't set pointer position at the middle
 - Can't set window icon (You have to set the application's icon in order to get custom icon)
 
 Known Issues:
-- Proper typing shortcuts (Ctrl+A, Ctrl+C, etc)
-- Proper window size after doing Fullscreen/un-Fullscreen multiple times
+- Proper window size after doing Fullscreen/un-Fullscreen multiple times (libdecor issue)
 
 For Download and How to use it: [Click Here](https://github.com/BoyOrigin/glfw/releases/tag/3.4.0)
 
