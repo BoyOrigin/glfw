@@ -1983,6 +1983,7 @@ GLFWbool _glfwCreateWindowWayland(_GLFWwindow* window,
 
     if (window->monitor || wndconfig->visible)
     {
+        libdecor_frame_set_app_id(window->wl.decoration_frame, window->wl.appId);
 #ifndef WITH_DECORATION
         if (!createShellObjects(window))
             return GLFW_FALSE;
@@ -2043,7 +2044,7 @@ void _glfwSetWindowTitleWayland(_GLFWwindow* window, const char* title)
     if (window->wl.decoration_frame) {
 //
         libdecor_frame_set_title(window->wl.decoration_frame, window->wl.title);
-        libdecor_frame_set_app_id(window->wl.decoration_frame, window->wl.title);
+        //libdecor_frame_set_app_id(window->wl.decoration_frame, window->wl.title);
     }
 #else
     if (window->wl.xdg.toplevel)
@@ -2210,7 +2211,7 @@ void _glfwIconifyWindowWayland(_GLFWwindow* window)
 void _glfwRestoreWindowWayland(_GLFWwindow* window)
 {
 #ifdef WITH_DECORATION
-    libdecor_frame_unset_fullscreen(window->wl.decoration_frame);
+    //libdecor_frame_unset_fullscreen(window->wl.decoration_frame);
     libdecor_frame_unset_maximized(window->wl.decoration_frame);
 #else
     if (window->monitor)
@@ -2300,7 +2301,6 @@ void _glfwSetWindowMonitorWayland(_GLFWwindow* window,
     {
         if (!monitor)
             _glfwSetWindowSizeWayland(window, width, height);
-
         return;
     }
 
