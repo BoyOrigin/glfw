@@ -1984,7 +1984,7 @@ GLFWbool _glfwCreateWindowWayland(_GLFWwindow* window,
     if (window->monitor || wndconfig->visible)
     {
 #ifdef WITH_DECORATION
-        libdecor_frame_set_app_id(window->wl.decoration_frame, "org.prismlauncher.PrismLauncher.desktop");
+        libdecor_frame_set_app_id(window->wl.decoration_frame, window->wl.appId);
 #else
         if (!createShellObjects(window))
             return GLFW_FALSE;
