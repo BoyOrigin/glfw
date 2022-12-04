@@ -16,9 +16,6 @@ Impossible to fix knowing Wayland doesn't have support about it for security pur
 - Can't set pointer position at the middle
 - Can't set window icon (You have to set the application's icon in order to get custom icon)
 
-Known Issues:
-- Proper window size after doing Fullscreen/un-Fullscreen multiple times (libdecor issue)
-
 For Download and How to use it: [Click Here](https://github.com/BoyOrigin/glfw/releases/tag/3.4.0)
 
 ## Introduction
