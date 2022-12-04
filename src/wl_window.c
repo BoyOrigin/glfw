@@ -211,9 +211,14 @@ void frame_configure(struct libdecor_frame *frame, struct libdecor_configuration
             width = window->wl.width;
             height = window->wl.height;
         }
-    } else {
+    } else if (window->wl.hovered) {
         width = window->wl.width;
         height = window->wl.height;
+    } else {
+        if (!libdecor_configuration_get_content_size(configuration, frame, &width, &height)) {
+            width = window->wl.width;
+            height = window->wl.height;
+        }
     }
 
     window->wl.width = width;
