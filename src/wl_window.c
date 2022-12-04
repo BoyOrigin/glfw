@@ -205,7 +205,13 @@ void frame_configure(struct libdecor_frame *frame, struct libdecor_configuration
     _GLFWwindow* window = user_data;
 
     int width, height;
-    if (!libdecor_configuration_get_content_size(configuration, frame, &width, &height)) {
+
+    if (window->wl.fullscreen) {
+        if (!libdecor_configuration_get_content_size(configuration, frame, &width, &height)) {
+            width = window->wl.width;
+            height = window->wl.height;
+        }
+    } else {
         width = window->wl.width;
         height = window->wl.height;
     }
@@ -221,6 +227,7 @@ void frame_configure(struct libdecor_frame *frame, struct libdecor_configuration
     struct libdecor_state *state = libdecor_state_new(width, height);
     libdecor_frame_commit(frame, state, configuration);
     libdecor_state_free(state);
+
 }
 
 void frame_close(struct libdecor_frame *frame, void *user_data)
@@ -2308,6 +2315,7 @@ void _glfwSetWindowMonitorWayland(_GLFWwindow* window,
     if (window->monitor) {
 #ifdef WITH_DECORATION
         libdecor_frame_unset_fullscreen(window->wl.decoration_frame);
+        window->wl.fullscreen = GLFW_FALSE;
 #endif
         releaseMonitor(window);
     }
@@ -2315,14 +2323,17 @@ void _glfwSetWindowMonitorWayland(_GLFWwindow* window,
    _glfwInputWindowMonitor(window, monitor);
 
 #ifdef WITH_DECORATION
-    if (window->monitor)
+    if (window->monitor) {
         libdecor_frame_set_fullscreen(window->wl.decoration_frame, monitor->wl.output);
+        window->wl.fullscreen = GLFW_TRUE;
+    }
 #endif
 
-    if (window->monitor)
+    if (window->monitor) {
         acquireMonitor(window);
-    else
+    } else {
         _glfwSetWindowSizeWayland(window, width, height);
+    }
 }
 
 GLFWbool _glfwWindowFocusedWayland(_GLFWwindow* window)
